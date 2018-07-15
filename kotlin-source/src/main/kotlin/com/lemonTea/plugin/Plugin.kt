@@ -5,7 +5,7 @@ import net.corda.core.messaging.CordaRPCOps
 import net.corda.webserver.services.WebServerPluginRegistry
 import java.util.function.Function
 
-class ExamplePlugin : WebServerPluginRegistry {
+class Plugin : WebServerPluginRegistry {
     /**
      * A list of classes that expose web APIs.
      */

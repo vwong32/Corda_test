@@ -10,13 +10,13 @@ import javax.persistence.Table
 /**
  * The family of schemas for TransactionState.
  */
-object IOUSchema
+object TransactionSchema
 
 /**
  * An TransactionState schema.
  */
-object IOUSchemaV1 : MappedSchema(
-        schemaFamily = IOUSchema.javaClass,
+object TransactionSchema1 : MappedSchema(
+        schemaFamily = TransactionSchema.javaClass,
         version = 1,
         mappedTypes = listOf(PersistentIOU::class.java)) {
     @Entity

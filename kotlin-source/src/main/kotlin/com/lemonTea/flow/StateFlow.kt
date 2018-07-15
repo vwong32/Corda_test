@@ -1,11 +1,11 @@
 package com.lemonTea.flow
 
 import co.paralleluniverse.fibers.Suspendable
-import com.lemonTea.contract.IOUContract
-import com.lemonTea.contract.IOUContract.Companion.IOU_CONTRACT_ID
-import com.lemonTea.flow.ExampleFlow.Acceptor
-import com.lemonTea.flow.ExampleFlow.Initiator
-import com.lemonTea.state.IOUState
+import com.lemonTea.contract.Contract
+import com.lemonTea.contract.Contract.Companion.CONTRACT_ID
+import com.lemonTea.flow.StateFlow.Acceptor
+import com.lemonTea.flow.StateFlow.Initiator
+import com.lemonTea.state.TransactionState
 import net.corda.core.contracts.Command
 import net.corda.core.contracts.requireThat
 import net.corda.core.flows.*
@@ -17,7 +17,7 @@ import net.corda.core.utilities.ProgressTracker.Step
 
 /**
  * This flow allows two parties (the [Initiator] and the [Acceptor]) to come to an agreement about the IOU encapsulated
- * within an [IOUState].
+ * within an [TransactionState].
  *
  * In our simple lemonTea, the [Acceptor] always accepts a valid IOU.
  *
@@ -26,11 +26,12 @@ import net.corda.core.utilities.ProgressTracker.Step
  *
  * All methods called within the [FlowLogic] sub-class need to be annotated with the @Suspendable annotation.
  */
-object ExampleFlow {
+object StateFlow {
     @InitiatingFlow
     @StartableByRPC
-    class Initiator(val iouValue: Int,
-                    val otherParty: Party) : FlowLogic<SignedTransaction>() {
+    /*class Initiator(val iouValue: Int,val productName: String, val action: String ,
+                    val otherParty: Party) : FlowLogic<SignedTransaction>() {*/
+    class Initiator(val iouValue: Int, val otherParty: Party) : FlowLogic<SignedTransaction>() {
         /**
          * The progress tracker checkpoints each stage of the flow and outputs the specified messages when each
          * checkpoint is reached in the code. See the 'progressTracker.currentStep' expressions within the call() function.
@@ -69,10 +70,10 @@ object ExampleFlow {
             // Stage 1.
             progressTracker.currentStep = GENERATING_TRANSACTION
             // Generate an unsigned transaction.
-            val iouState = IOUState(iouValue, serviceHub.myInfo.legalIdentities.first(), otherParty)
-            val txCommand = Command(IOUContract.Commands.Create(), iouState.participants.map { it.owningKey })
+            val iouState = TransactionState(iouValue, serviceHub.myInfo.legalIdentities.first(), otherParty)
+            val txCommand = Command(Contract.Commands.Create(), iouState.participants.map { it.owningKey })
             val txBuilder = TransactionBuilder(notary)
-                    .addOutputState(iouState, IOU_CONTRACT_ID)
+                    .addOutputState(iouState, CONTRACT_ID)
                     .addCommand(txCommand)
 
             // Stage 2.
@@ -105,8 +106,8 @@ object ExampleFlow {
             val signTransactionFlow = object : SignTransactionFlow(otherPartyFlow) {
                 override fun checkTransaction(stx: SignedTransaction) = requireThat {
                     val output = stx.tx.outputs.single().data
-                    "This must be an IOU transaction." using (output is IOUState)
-                    val iou = output as IOUState
+                    "This must be an transaction." using (output is TransactionState)
+                    val iou = output as TransactionState
                     "I won't accept Transaction with a value over 100." using (iou.value <= 100)
                 }
             }

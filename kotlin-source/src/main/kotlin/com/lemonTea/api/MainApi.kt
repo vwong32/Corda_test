@@ -1,8 +1,8 @@
-package com.example.api
+package com.lemonTea.api
 
-import com.example.flow.ExampleFlow.Initiator
-import com.example.schema.IOUSchemaV1
-import com.example.state.IOUState
+import com.lemonTea.flow.StateFlow.Initiator
+import com.lemonTea.schema.TransactionSchema1
+import com.lemonTea.state.TransactionState
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.messaging.startTrackedFlow
@@ -22,8 +22,8 @@ import javax.ws.rs.core.Response.Status.CREATED
 
 val SERVICE_NAMES = listOf("Notary", "Network Map Service")
 
-// This API is accessible from /api/example. All paths specified below are relative to it.
-@Path("example")
+// This API is accessible from /api/lemonTea. All paths specified below are relative to it.
+@Path("lemonTea")
 class mainApi(private val rpcOps: CordaRPCOps) {
     private val myLegalName: CordaX500Name = rpcOps.nodeInfo().legalIdentities.first().name
 
@@ -55,18 +55,18 @@ class mainApi(private val rpcOps: CordaRPCOps) {
     }
 
     /**
-     * Displays all IOU states that exist in the node's vault.
+     * Displays all states that exist in the node's vault.
      */
     @GET
     @Path("ious")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getIOUs() = rpcOps.vaultQueryBy<IOUState>().states
+    fun getIOUs() = rpcOps.vaultQueryBy<TransactionState>().states
 
     /**
      * Initiates a flow to agree an IOU between two parties.
      *
      * Once the flow finishes it will have written the IOU to ledger. Both the lender and the borrower will be able to
-     * see it when calling /api/example/ious on their respective nodes.
+     * see it when calling /api/lemonTea/ious on their respective nodes.
      *
      * This end-point takes a Party name parameter as part of the path. If the serving node can't find the other party
      * in its network map cache, it will return an HTTP bad request.
@@ -75,9 +75,9 @@ class mainApi(private val rpcOps: CordaRPCOps) {
      */
     @PUT
     @Path("create-iou")
-    fun createIOU(@QueryParam("iouValue") iouValue: Int, @QueryParam("partyName") partyName: CordaX500Name?): Response {
-        if (iouValue <= 0 ) {
-            return Response.status(BAD_REQUEST).entity("Query parameter 'iouValue' must be non-negative.\n").build()
+    fun createIOU(@QueryParam("amount") amount: Int, @QueryParam("partyName") partyName: CordaX500Name?): Response {
+        if (amount <= 0 ) {
+            return Response.status(BAD_REQUEST).entity("Query parameter 'amount' must be non-negative.\n").build()
         }
         if (partyName == null) {
             return Response.status(BAD_REQUEST).entity("Query parameter 'partyName' missing or has wrong format.\n").build()
@@ -86,7 +86,7 @@ class mainApi(private val rpcOps: CordaRPCOps) {
                 return Response.status(BAD_REQUEST).entity("Party named $partyName cannot be found.\n").build()
 
         return try {
-            val signedTx = rpcOps.startTrackedFlow(::Initiator, iouValue, otherParty).returnValue.getOrThrow()
+            val signedTx = rpcOps.startTrackedFlow(::Initiator, amount, otherParty).returnValue.getOrThrow()
             Response.status(CREATED).entity("Transaction id ${signedTx.id} committed to ledger.\n").build()
 
         } catch (ex: Throwable) {
@@ -96,7 +96,7 @@ class mainApi(private val rpcOps: CordaRPCOps) {
     }
 	
 	/**
-     * Displays all IOU states created.
+     * Displays all states created.
      */
     @GET
     @Path("my-ious")
@@ -104,10 +104,10 @@ class mainApi(private val rpcOps: CordaRPCOps) {
     fun myious(): Response {
         val generalCriteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
         val results = builder {
-                var partyType = IOUSchemaV1.PersistentIOU::lenderName.equal(rpcOps.nodeInfo().legalIdentities.first().name.toString())
+                var partyType = TransactionSchema1.PersistentIOU::receiver.equal(rpcOps.nodeInfo().legalIdentities.first().name.toString())
                 val customCriteria = QueryCriteria.VaultCustomQueryCriteria(partyType)
                 val criteria = generalCriteria.and(customCriteria)
-                val results = rpcOps.vaultQueryBy<IOUState>(criteria).states
+                val results = rpcOps.vaultQueryBy<TransactionState>(criteria).states
                 return Response.ok(results).build()
         }
     }

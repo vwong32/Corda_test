@@ -35,12 +35,12 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
         <div class="navbar-header">
             <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
         </div>
-        <button ng-click="demoApp.openModal()" type="button" class="btn btn-primary navbar-btn">Create IOU</button>
+        <button ng-click="demoApp.openModal()" type="button" class="btn btn-primary navbar-btn">Create Transaction</button>
     </div>
 </nav>
 <script type="text/ng-template" id="demoAppModal.html">
     <div class="modal-header">
-        <h4 class="modal-title">Add new IOU</h4>
+        <h4 class="modal-title">Add new record</h4>
     </div>
     <form>
         <div class="modal-body">
@@ -58,13 +58,13 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                 <div class="alert alert-danger" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Error:</span>
-                    Enter valid IOU parameters
+                    Enter valid parameters
                 </div>
             </div>
         </div>
         <div class="modal-footer">
             <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">Close</button>
-            <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Create IOU</button>
+            <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Create Transaction</button>
         </div>
     </form>
 </script>
@@ -82,12 +82,12 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                 <div class="panel-primary">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            Recorded IOUs:
+                            Records:
                         </h4>
                     </div>
                 </div>
                 <div>
-                    <div ng-show="!demoApp.ious.length" class="panel-body">Use the "Create IOU" button to send an IOU to a peer.</div>
+                    <div ng-show="!demoApp.ious.length" class="panel-body">Use the "Create Transaction" button to send an request to a peer.</div>
                     <div ng-repeat="iou in demoApp.ious" class="panel panel-default">
                         <div class="panel-body">
                             <ul>

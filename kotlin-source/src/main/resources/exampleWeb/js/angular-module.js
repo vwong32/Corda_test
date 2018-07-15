@@ -27,7 +27,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     const demoApp = this;
 
     // We identify the node.
-    const apiBaseURL = "/api/example/";
+    const apiBaseURL = "/api/lemonTea/";
     let peers = [];
 
     $http.get(apiBaseURL + "me").then((response) => demoApp.thisNode = response.data.me);

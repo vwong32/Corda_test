@@ -5,8 +5,8 @@ Requires=network.target
 [Service]
 Type=simple
 User=corda
-WorkingDirectory=/opt/partyc
-ExecStart=/usr/bin/java -jar /opt/partyc/corda-webserver.jar
+WorkingDirectory=/opt/GrogeryStore
+ExecStart=/usr/bin/java -jar /opt/GrogeryStore/corda-webserver.jar
 Restart=on-failure
 
 [Install]

@@ -12,7 +12,7 @@ apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
-jar.baseName = "cordapp-example"
+jar.baseName = "cordapp-lemonTea"
 
 sourceSets {
     main {
@@ -77,13 +77,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     directory "./build/nodes"
     node {
-        name "O=Notary,L=London,C=GB"
+        name "O=Notary,L=New York,C=US"
         notary = [validating : false]
         p2pPort 10006
         cordapps = ["$corda_release_group:corda-finance:$corda_release_version"]
     }
     node {
-        name "O=PartyA,L=London,C=GB"
+        name "O=MaterialSupplier,L=New Jersey,C=US"
         p2pPort 10007
         rpcSettings {
             address("localhost:10008")
@@ -94,7 +94,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcUsers = [[user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
     node {
-        name "O=PartyB,L=New York,C=US"
+        name "O=Manufacturer,L=New York,C=US"
         p2pPort 10010
         rpcSettings {
             address("localhost:10011")
@@ -105,7 +105,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcUsers = [[user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
     node {
-        name "O=PartyC,L=Paris,C=FR"
+        name "O=GrogeryStore,L=New York,C=US"
         p2pPort 10013
         rpcSettings {
             address("localhost:10014")
@@ -119,6 +119,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
 
 task runExampleClientRPCKotlin(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.example.client.ExampleClientRPCKt'
+    main = 'com.lemonTea.client.ExampleClientRPCKt'
     args 'localhost:10008'
 }

@@ -10,11 +10,11 @@ import net.corda.core.transactions.LedgerTransaction
 /**
  * A implementation of a basic smart contract in Corda.
  *
- * This contract enforces rules regarding the creation of a valid [TransactionState], which in turn encapsulates an [IOU].
+ * This contract enforces rules regarding the creation of a valid [TransactionState], which in turn encapsulates an [Transaction].
  *
- * For a new [IOU] to be issued onto the ledger, a transaction is required which takes:
+ * For a new [Transaction] to be issued onto the ledger, a transaction is required which takes:
  * - Zero input states.
- * - One output state: the new [IOU].
+ * - One output state: the new [Transaction].
  * - An Create() command with the public keys of both the lender and the borrower.
  *
  * All contracts must sub-class the [Contract] interface.
@@ -22,7 +22,7 @@ import net.corda.core.transactions.LedgerTransaction
 class Contract : Contract {
     companion object {
         @JvmStatic
-        val IOU_CONTRACT_ID = "com.lemonTea.contract.Contract"
+        val CONTRACT_ID = "com.lemonTea.contract.Contract"
     }
 
     /**
