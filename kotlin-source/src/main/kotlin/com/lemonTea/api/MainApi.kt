@@ -24,11 +24,11 @@ val SERVICE_NAMES = listOf("Notary", "Network Map Service")
 
 // This API is accessible from /api/example. All paths specified below are relative to it.
 @Path("example")
-class ExampleApi(private val rpcOps: CordaRPCOps) {
+class mainApi(private val rpcOps: CordaRPCOps) {
     private val myLegalName: CordaX500Name = rpcOps.nodeInfo().legalIdentities.first().name
 
     companion object {
-        private val logger: Logger = loggerFor<ExampleApi>()
+        private val logger: Logger = loggerFor<mainApi>()
     }
 
     /**
@@ -96,7 +96,7 @@ class ExampleApi(private val rpcOps: CordaRPCOps) {
     }
 	
 	/**
-     * Displays all IOU states that are created by Party.
+     * Displays all IOU states created.
      */
     @GET
     @Path("my-ious")

@@ -1,6 +1,6 @@
-package com.example.state
+package com.lemonTea.state
 
-import com.example.schema.IOUSchemaV1
+import com.lemonTea.schema.IOUSchemaV1
 import net.corda.core.contracts.ContractState
 import net.corda.core.contracts.LinearState
 import net.corda.core.contracts.UniqueIdentifier
@@ -22,6 +22,8 @@ import net.corda.core.schemas.QueryableState
 data class IOUState(val value: Int,
                     val lender: Party,
                     val borrower: Party,
+                    val productName : String,
+                    val action: String,
                     override val linearId: UniqueIdentifier = UniqueIdentifier()):
         LinearState, QueryableState {
     /** The public keys of the involved parties. */
@@ -32,6 +34,8 @@ data class IOUState(val value: Int,
             is IOUSchemaV1 -> IOUSchemaV1.PersistentIOU(
                     this.lender.name.toString(),
                     this.borrower.name.toString(),
+                    this.productName,
+                    this.action,
                     this.value,
                     this.linearId.id
             )

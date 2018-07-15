@@ -1,11 +1,11 @@
-package com.example.flow
+package com.lemonTea.flow
 
 import co.paralleluniverse.fibers.Suspendable
-import com.example.contract.IOUContract
-import com.example.contract.IOUContract.Companion.IOU_CONTRACT_ID
-import com.example.flow.ExampleFlow.Acceptor
-import com.example.flow.ExampleFlow.Initiator
-import com.example.state.IOUState
+import com.lemonTea.contract.IOUContract
+import com.lemonTea.contract.IOUContract.Companion.IOU_CONTRACT_ID
+import com.lemonTea.flow.ExampleFlow.Acceptor
+import com.lemonTea.flow.ExampleFlow.Initiator
+import com.lemonTea.state.IOUState
 import net.corda.core.contracts.Command
 import net.corda.core.contracts.requireThat
 import net.corda.core.flows.*
@@ -19,7 +19,7 @@ import net.corda.core.utilities.ProgressTracker.Step
  * This flow allows two parties (the [Initiator] and the [Acceptor]) to come to an agreement about the IOU encapsulated
  * within an [IOUState].
  *
- * In our simple example, the [Acceptor] always accepts a valid IOU.
+ * In our simple lemonTea, the [Acceptor] always accepts a valid IOU.
  *
  * These flows have deliberately been implemented by using only the call() method for ease of understanding. In
  * practice we would recommend splitting up the various stages of the flow into sub-routines.
@@ -107,7 +107,7 @@ object ExampleFlow {
                     val output = stx.tx.outputs.single().data
                     "This must be an IOU transaction." using (output is IOUState)
                     val iou = output as IOUState
-                    "I won't accept IOUs with a value over 100." using (iou.value <= 100)
+                    "I won't accept Transaction with a value over 100." using (iou.value <= 100)
                 }
             }
 

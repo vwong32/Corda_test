@@ -1,6 +1,6 @@
-package com.example.client
+package com.lemonTea.client
 
-import com.example.state.IOUState
+import com.lemonTea.state.IOUState
 import net.corda.client.rpc.CordaRPCClient
 import net.corda.core.contracts.StateAndRef
 import net.corda.core.utilities.NetworkHostAndPort
@@ -27,7 +27,7 @@ private class ExampleClientRPC {
         val nodeAddress = NetworkHostAndPort.parse(args[0])
         val client = CordaRPCClient(nodeAddress)
 
-        // Can be amended in the com.example.MainKt file.
+        // Can be amended in the com.lemonTea.MainKt file.
         val proxy = client.start("user1", "test").proxy
 
         // Grab all existing and future IOU states in the vault.

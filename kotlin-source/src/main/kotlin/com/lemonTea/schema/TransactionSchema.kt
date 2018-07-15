@@ -1,4 +1,4 @@
-package com.example.schema
+package com.lemonTea.schema
 
 import net.corda.core.schemas.MappedSchema
 import net.corda.core.schemas.PersistentState
@@ -8,12 +8,12 @@ import javax.persistence.Entity
 import javax.persistence.Table
 
 /**
- * The family of schemas for IOUState.
+ * The family of schemas for TransactionState.
  */
 object IOUSchema
 
 /**
- * An IOUState schema.
+ * An TransactionState schema.
  */
 object IOUSchemaV1 : MappedSchema(
         schemaFamily = IOUSchema.javaClass,
@@ -22,11 +22,17 @@ object IOUSchemaV1 : MappedSchema(
     @Entity
     @Table(name = "iou_states")
     class PersistentIOU(
-            @Column(name = "lender")
-            var lenderName: String,
+            @Column(name = "receiver")
+            var receiver: String,
 
-            @Column(name = "borrower")
-            var borrowerName: String,
+            @Column(name = "issuer")
+            var issuer: String,
+
+            /*@Column(name= "product")
+            var productName: String,
+
+            @Column(name= "action")
+            var action: String,*/
 
             @Column(name = "value")
             var value: Int,
@@ -35,6 +41,7 @@ object IOUSchemaV1 : MappedSchema(
             var linearId: UUID
     ) : PersistentState() {
         // Default constructor required by hibernate.
+        //constructor(): this("", "", "",0, UUID.randomUUID())
         constructor(): this("", "", 0, UUID.randomUUID())
     }
 }
